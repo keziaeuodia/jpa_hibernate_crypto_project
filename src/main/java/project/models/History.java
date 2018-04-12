@@ -1,42 +1,17 @@
 package project.models;
 
-import javax.persistence.*;
+public class History {
 
-@Entity
-@Table
-public class HistoMinute extends History{
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-
-    @Column
     String fromCurrency;
-
-    @Column
     String toCurrency;
-
-    @Column
     long time;
-
-    @Column
     double close;
-
-    @Column
     double high;
-
-    @Column
     double low;
-
-    @Column
     double open;
-
-    @Column
     double volumefrom;
-
-    @Column
     double volumeto;
-
 
     public int getId() {
         return id;

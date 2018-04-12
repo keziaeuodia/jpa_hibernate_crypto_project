@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table
-public class HistoMinute extends History{
+public class HistoHour extends History{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,7 +36,6 @@ public class HistoMinute extends History{
 
     @Column
     double volumeto;
-
 
     public int getId() {
         return id;
@@ -117,4 +116,5 @@ public class HistoMinute extends History{
     public void setVolumeto(double volumeto) {
         this.volumeto = volumeto;
     }
+
 }
