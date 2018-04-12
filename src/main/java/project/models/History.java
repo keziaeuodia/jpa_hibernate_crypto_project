@@ -1,22 +1,45 @@
 package project.models;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table
-public class History {
+public class History{
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
+    @Column
     String fromCurrency;
+
+    @Column
     String toCurrency;
+
+    @Column
     long time;
+
+    @Column
     double close;
+
+    @Column
     double high;
+
+    @Column
     double low;
+
+    @Column
     double open;
+
+    @Column
     double volumefrom;
+
+    @Column
     double volumeto;
+
+    @Column
+    String timesignal;
+
 
     public int getId() {
         return id;
@@ -97,4 +120,14 @@ public class History {
     public void setVolumeto(double volumeto) {
         this.volumeto = volumeto;
     }
+
+    public String getTimesignal() {
+        return timesignal;
+    }
+
+    public void setTimesignal(String timesignal) {
+        this.timesignal = timesignal;
+    }
+
+
 }
