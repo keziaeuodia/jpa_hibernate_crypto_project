@@ -9,7 +9,7 @@ import java.util.ArrayList;
 @Repository
 public interface HistoryInterface extends JpaRepository<History, Integer>{
 
-    public History findByTimeAndFromCurrencyAndToCurrency(long time, String fromCurrency, String toCurrency);
+    public History findByTimeAndFromCurrencyAndToCurrencyAndTimesignal(long time, String fromCurrency, String toCurrency, String timesignal);
     public ArrayList<History> findByFromCurrency(String fsym);
     public ArrayList<History> findByToCurrency(String tsym);
     public ArrayList<History> findByFromCurrencyAndToCurrency(String fsym, String tsym);

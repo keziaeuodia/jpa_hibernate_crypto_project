@@ -17,7 +17,15 @@ public class CryptoService {
     @Autowired
     HistoryInterface historyInterface;
 
-
+    /**
+     * Method called by the controller to make a third party API call to crypto compare
+     * @param param histoday, histohour, or histominute
+     * @param fsym fromCurrency passed by user
+     * @param tsym toCurrency passed by user
+     * @param limit limit of the data taken, max 2000
+     * @param persist if persist is true, saveAllData method will be called to persist data to the database
+     * @return
+     */
     public CryptoRoot search(String param, String fsym, String tsym, int limit, boolean persist) {
         String fquery = "https://min-api.cryptocompare.com/data/" + param + "?fsym="+fsym+"&tsym="+tsym+"&limit="+limit;
 
@@ -32,6 +40,14 @@ public class CryptoService {
     }
 
 
+    /**
+     * Method that's being called by the search method when persist value is true
+     * This method calls the checkDuplicate method that will persist data to the database, only if there's no duplicate
+     * @param data data retrieved from the search result
+     * @param fsym fromCurrency
+     * @param tsym toCurrency
+     * @param param histominute, histohour, or histoday
+     */
     private void saveAllData(CryptoRoot data, String fsym, String tsym, String param) {
         for(int i = 0; i < data.getData().length; i++) {
 
@@ -64,7 +80,8 @@ public class CryptoService {
 
     //checking if there is any duplicate time in the data based on fromCurrency, toCurrency, and time
     private boolean checkDuplicate (History obj){
-        History history =  historyInterface.findByTimeAndFromCurrencyAndToCurrency(obj.getTime(), obj.getFromCurrency(), obj.getToCurrency());
+        History history =  historyInterface.findByTimeAndFromCurrencyAndToCurrencyAndTimesignal(
+                obj.getTime(), obj.getFromCurrency(), obj.getToCurrency(), obj.getTimesignal());
         if (history == null) {
             return false;
         }else return true;

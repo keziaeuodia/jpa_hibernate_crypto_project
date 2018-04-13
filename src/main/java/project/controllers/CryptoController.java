@@ -28,7 +28,7 @@ public class CryptoController {
     @RequestMapping("/histominute")
     public CryptoRoot searchMinute (@RequestParam(value = "fsym", required = true, defaultValue = "BTC") String fsym,
                                     @RequestParam(value = "tsym", required = true, defaultValue = "USD") String tsym,
-                                    @RequestParam(value = "limit", required = false) int limit,
+                                    @RequestParam(value = "limit", required = false, defaultValue = "1440") int limit,
                                     @RequestParam(value = "persist", defaultValue = "false") boolean persist){
         return cryptoService.search("histominute", fsym, tsym, limit, persist);
     }
@@ -44,7 +44,7 @@ public class CryptoController {
     @RequestMapping("/histohour")
     public CryptoRoot searchHour (@RequestParam(value = "fsym", required = true, defaultValue = "BTC") String fsym,
                                   @RequestParam(value = "tsym", required = true, defaultValue = "USD") String tsym,
-                                  @RequestParam(value = "limit", required = false) int limit,
+                                  @RequestParam(value = "limit", required = false, defaultValue = "500") int limit,
                                   @RequestParam(value = "persist", defaultValue = "false") boolean persist){
         return cryptoService.search("histohour", fsym, tsym, limit, persist);
     }
@@ -54,54 +54,89 @@ public class CryptoController {
      * histoday returns open, high, low, close, volumefrom and volumeto daily historical data. The values are based on 00:00 GMT time.
      * @param fsym determine cryptocurrency you want to query e.g BTC
      * @param tsym determine the currency to compare it against e.g USD
+     * @param limit determine the limit of the data taken, max 2000
      * @param persist has the default value of false, if persist=true, data requested will be persisted to DB
      * @return CryptoRoot data
      */
     @RequestMapping("/histoday")
     public CryptoRoot searchDay (@RequestParam(value = "fsym", required = true, defaultValue = "BTC") String fsym,
                                  @RequestParam(value = "tsym", required = true, defaultValue = "USD") String tsym,
-                                 @RequestParam(value = "limit", required = false) int limit,
+                                 @RequestParam(value = "limit", required = false, defaultValue = "100") int limit,
                                  @RequestParam(value = "persist", defaultValue = "false") boolean persist){
         return cryptoService.search("histoday", fsym, tsym, limit, persist);
     }
 
-    //get crypto data by "from" currency
+    /**
+     * getting history of crypto data from the database
+     * path: /data/tsym?tsym=USD
+     * @param fsym determine cryptocurrency you want to query e.g BTC
+     * @return list of History data where toCurrency = fsym
+     */
     @RequestMapping(method= RequestMethod.GET, value = "/fsym")
     public ArrayList<History> findByFsym(@RequestParam(value = "fsym", required = true) String fsym){
         return cryptoService.getDataByFsym(fsym);
     }
 
-    //get crypto data by "to" currency
+    /**
+     * getting history of crypto data from the database
+     * e.g. /data/tsym?tsym=USD
+     * @param tsym determine the currency to compare it against e.g USD
+     * @return list of History data where toCurrency = tsym
+     */
     @RequestMapping(method= RequestMethod.GET, value = "/tsym")
     public ArrayList<History> findByTsym(@RequestParam(value = "tsym", required = true) String tsym){
         return cryptoService.getDataByTsym(tsym);
     }
 
-    //get crypto data by "id"
+    /**
+     * getting history data from the database based on the id
+     * e.g. /data/897
+     * @param id
+     * @return history data of that particular id
+     */
     @GetMapping("/{id}")
     public History getDataById(@PathVariable(value = "id") int id){
         return cryptoService.getDataById(id);
     }
 
-    //get all crypto data from the database
+    /**
+     * getting all history data from the database
+     * e.g /data/
+     * @return a list of history data in the database
+     */
     @GetMapping("/")
     public ArrayList<History> findAll(){
         return cryptoService.getAllData();
     }
 
-    //post new crypto data to DB
+    /**
+     * using curl or postman, insert a new data object
+     * e.g. /data/
+     * @param data
+     * @return
+     */
     @PostMapping("/")
     public String add(@RequestBody History data){
         return cryptoService.addData(data);
     }
 
-    //edit data in DB by ID
+    /**
+     * using curl or postman patch a history data of the primary key (id)
+     * e.g. /data/
+     * @param data
+     * @return
+     */
     @PatchMapping("/")
     public History update(@RequestBody History data) {
         return cryptoService.update(data);
     }
 
-    //delete data in DB by ID
+    /**
+     * using curl or postman delete a history data based on id
+     * e.g. /data/879
+     * @param id
+     * @return
+     */
     @DeleteMapping("/{id}")
     public String deleteById(@PathVariable(value = "id") int id){
         return cryptoService.deleteDataById(id);
