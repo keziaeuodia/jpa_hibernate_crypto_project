@@ -1,6 +1,8 @@
 package project.models;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Entity
 @Table
@@ -39,6 +41,9 @@ public class History{
 
     @Column
     String timesignal;
+
+    @Column
+    Date date;
 
 
     public int getId() {
@@ -129,5 +134,13 @@ public class History{
         this.timesignal = timesignal;
     }
 
+    public Date getDate() {
+        return date;
+    }
 
+    public void setDate(long time) {
+        long timemillis = time*1000;
+        Date dateTime = new Date(timemillis);
+        this.date = dateTime;
+    }
 }

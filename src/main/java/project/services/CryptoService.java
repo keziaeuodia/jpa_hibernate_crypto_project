@@ -62,6 +62,7 @@ public class CryptoService {
             obj.setOpen(data.getData()[i].getOpen());
             obj.setVolumefrom(data.getData()[i].getVolumefrom());
             obj.setVolumeto(data.getData()[i].getVolumeto());
+            obj.setDate(data.getData()[i].getTime());
             switch (param){
                 case "histominute":
                     obj.setTimesignal("min");
@@ -80,8 +81,8 @@ public class CryptoService {
 
     //checking if there is any duplicate time in the data based on fromCurrency, toCurrency, and time
     private boolean checkDuplicate (History obj){
-        History history =  historyInterface.findByTimeAndFromCurrencyAndToCurrencyAndTimesignal(
-                obj.getTime(), obj.getFromCurrency(), obj.getToCurrency(), obj.getTimesignal());
+        History history =  historyInterface.findByTimeAndFromCurrencyAndToCurrencyAndTimesignalAndDate(
+                obj.getTime(), obj.getFromCurrency(), obj.getToCurrency(), obj.getTimesignal(), obj.getDate());
         if (history == null) {
             return false;
         }else return true;
