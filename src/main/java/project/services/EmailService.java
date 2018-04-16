@@ -11,7 +11,7 @@ import com.amazonaws.services.simpleemail.model.Destination;
 import com.amazonaws.services.simpleemail.model.Message;
 import com.amazonaws.services.simpleemail.model.SendEmailRequest;
 
-public class AmazonSESSample {
+public class EmailService {
 
     // Replace sender@example.com with your "From" address.
     // This address must be verified with Amazon SES.
