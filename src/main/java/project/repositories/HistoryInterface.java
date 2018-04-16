@@ -10,10 +10,11 @@ import java.util.Date;
 @Repository
 public interface HistoryInterface extends JpaRepository<History, Integer>{
 
-    public History findByTimeAndFromCurrencyAndToCurrencyAndTimesignalAndDate(long time, String fromCurrency, String toCurrency, String timesignal, Date date);
-    public ArrayList<History> findByFromCurrency(String fsym);
-    public ArrayList<History> findByToCurrency(String tsym);
-    public ArrayList<History> findByFromCurrencyAndToCurrency(String fsym, String tsym);
+    public History findByTimeAndFromCurrencyAndToCurrencyAndTimesignal(long time, String fromCurrency, String toCurrency, String timesignal);
+    public ArrayList<History> findByFromCurrencyAndTimesignal(String fsym, String timesignal);
+    public ArrayList<History> findByToCurrencyAndTimesignal(String tsym, String timesignal);
+    public ArrayList<History> findByFromCurrencyAndToCurrencyAndTimesignal(String fsym, String tsym, String timesignal);
+    public History findByTimeAndTimesignal(long time, String timesignal);
     public History findById(int id);
 
 }

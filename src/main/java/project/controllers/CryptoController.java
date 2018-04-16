@@ -70,22 +70,45 @@ public class CryptoController {
      * getting history of crypto data from the database
      * path: /data/tsym?tsym=USD
      * @param fsym determine cryptocurrency you want to query e.g BTC
+     * @param timesignal determine the time signal of the data requested, "minute", "hour", or "day",
+     *                   if it is not provided, the data given will be in minute
      * @return list of History data where toCurrency = fsym
      */
     @RequestMapping(method= RequestMethod.GET, value = "/fsym")
-    public ArrayList<History> findByFsym(@RequestParam(value = "fsym", required = true) String fsym){
-        return cryptoService.getDataByFsym(fsym);
+    public ArrayList<History> findByFsym(@RequestParam(value = "fsym", required = true) String fsym,
+                                         @RequestParam(value = "timesignal", required = false, defaultValue = "minute") String timesignal){
+        return cryptoService.getDataByFsym(fsym, timesignal);
     }
 
     /**
      * getting history of crypto data from the database
      * e.g. /data/tsym?tsym=USD
-     * @param tsym determine the currency to compare it against e.g USD
+     * @param tsym determine the currency to compare the fsym against e.g USD
+     * @param timesignal determine the time signal of the data requested, "minute", "hour", or "day",
+     *                   if it is not provided, the data given will be in minute
      * @return list of History data where toCurrency = tsym
      */
+
     @RequestMapping(method= RequestMethod.GET, value = "/tsym")
-    public ArrayList<History> findByTsym(@RequestParam(value = "tsym", required = true) String tsym){
-        return cryptoService.getDataByTsym(tsym);
+    public ArrayList<History> findByTsym(@RequestParam(value = "tsym", required = true) String tsym,
+                                         @RequestParam(value = "timesignal", required = false, defaultValue = "minute") String timesignal){
+        return cryptoService.getDataByTsym(tsym, timesignal);
+    }
+
+    /**
+     * getting history of crypto data from the database
+     * e.g. /data/currency?fsym=BTC&tsym=USD&timesignal=minute
+     * @param fsym determine cryptocurrency you want to query e.g BTC
+     * @param tsym determine the currency to compare it against e.g USD
+     * @param timesignal determine the time signal of the data requested, "minute", "hour", or "day",
+     *                   if it is not provided, the data given will be in minute
+     * @return list of History data where toCurrency = tsym
+     */
+    @RequestMapping(method= RequestMethod.GET, value = "/currency")
+    public ArrayList<History> findByFsymAndTsym(@RequestParam(value = "fsym", required = true) String fsym,
+                                                @RequestParam(value = "tsym", required = true) String tsym,
+                                                @RequestParam(value = "timesignal", required = false, defaultValue = "minute") String timesignal){
+        return cryptoService.getDataByFsymAndTsym(fsym, tsym, timesignal);
     }
 
     /**

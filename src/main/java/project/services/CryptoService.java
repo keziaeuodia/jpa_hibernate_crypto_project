@@ -65,7 +65,7 @@ public class CryptoService {
             obj.setDate(data.getData()[i].getTime());
             switch (param){
                 case "histominute":
-                    obj.setTimesignal("min");
+                    obj.setTimesignal("minute");
                     break;
                 case "histohour":
                     obj.setTimesignal("hour");
@@ -79,10 +79,14 @@ public class CryptoService {
     }
 
 
-    //checking if there is any duplicate time in the data based on fromCurrency, toCurrency, and time
+    /**
+     * checking if there is any duplicate time in the data based on time, fromCurrency, toCurrency, and timesignal
+     * @param obj is an History object which will be compared against the data in the database
+     * @return boolean value true if the data doesn't exist in the database
+     */
     private boolean checkDuplicate (History obj){
-        History history =  historyInterface.findByTimeAndFromCurrencyAndToCurrencyAndTimesignalAndDate(
-                obj.getTime(), obj.getFromCurrency(), obj.getToCurrency(), obj.getTimesignal(), obj.getDate());
+        History history =  historyInterface.findByTimeAndFromCurrencyAndToCurrencyAndTimesignal(
+                obj.getTime(), obj.getFromCurrency(), obj.getToCurrency(), obj.getTimesignal());
         if (history == null) {
             return false;
         }else return true;
@@ -94,21 +98,20 @@ public class CryptoService {
         return (ArrayList<History>) historyInterface.findAll();
     }
 
-    public ArrayList<History> getDataByFsym(String fromCurrency){
-
-        return historyInterface.findByFromCurrency(fromCurrency);
+    public ArrayList<History> getDataByFsym(String fromCurrency, String timesignal){
+        return historyInterface.findByFromCurrencyAndTimesignal(fromCurrency, timesignal);
     }
 
-    public ArrayList<History> getDataByTsym(String tsym) {
-        return historyInterface.findByToCurrency(tsym);
+    public ArrayList<History> getDataByTsym(String tsym, String timesignal) {
+        return historyInterface.findByToCurrencyAndTimesignal(tsym, timesignal);
     }
 
     public History getDataById(int id) {
         return historyInterface.findById(id);
     }
 
-    public ArrayList<History> getDataByFsymAndTsym(String fsym, String tsym){
-        return historyInterface.findByFromCurrencyAndToCurrency(fsym, tsym);
+    public ArrayList<History> getDataByFsymAndTsym(String fsym, String tsym, String timesignal){
+        return historyInterface.findByFromCurrencyAndToCurrencyAndTimesignal(fsym, tsym, timesignal);
     }
 
     public String addData(History data) {
@@ -124,6 +127,10 @@ public class CryptoService {
     public History update(History data) {
         historyInterface.save(data);
         return historyInterface.findById(data.getId());
+    }
+
+    public History findByTime(long time, String timesignal){
+        return historyInterface.findByTimeAndTimesignal(time, timesignal);
     }
 
 
