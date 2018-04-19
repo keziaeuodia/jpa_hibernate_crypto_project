@@ -133,5 +133,4 @@ public class CryptoService {
         return historyInterface.findByTimeAndTimesignal(time, timesignal);
     }
 
-
 }
