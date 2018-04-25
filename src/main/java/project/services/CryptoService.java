@@ -3,6 +3,7 @@ package project.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import project.exceptions.DuplicateDataException;
 import project.models.*;
 import project.repositories.HistoryInterface;
 
@@ -26,7 +27,7 @@ public class CryptoService {
      * @param persist if persist is true, saveAllData method will be called to persist data to the database
      * @return
      */
-    public CryptoRoot search(String param, String fsym, String tsym, int limit, boolean persist) {
+    public CryptoRoot search(String param, String fsym, String tsym, int limit, boolean persist) throws DuplicateDataException {
         String fquery = "https://min-api.cryptocompare.com/data/" + param + "?fsym="+fsym+"&tsym="+tsym+"&limit="+limit;
 
         //mapping the data to the class
@@ -48,7 +49,7 @@ public class CryptoService {
      * @param tsym toCurrency
      * @param param histominute, histohour, or histoday
      */
-    private void saveAllData(CryptoRoot data, String fsym, String tsym, String param) {
+    private void saveAllData(CryptoRoot data, String fsym, String tsym, String param) throws DuplicateDataException{
         for(int i = 0; i < data.getData().length; i++) {
 
             History obj = new History();

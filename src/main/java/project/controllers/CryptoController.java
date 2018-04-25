@@ -2,6 +2,7 @@ package project.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import project.exceptions.DuplicateDataException;
 import project.models.CryptoRoot;
 import project.models.History;
 import project.services.CryptoService;
@@ -29,7 +30,7 @@ public class CryptoController {
     public CryptoRoot searchMinute (@RequestParam(value = "fsym", required = true, defaultValue = "BTC") String fsym,
                                     @RequestParam(value = "tsym", required = true, defaultValue = "USD") String tsym,
                                     @RequestParam(value = "limit", required = false, defaultValue = "1440") int limit,
-                                    @RequestParam(value = "persist", defaultValue = "false") boolean persist){
+                                    @RequestParam(value = "persist", defaultValue = "false") boolean persist) throws DuplicateDataException {
         return cryptoService.search("histominute", fsym, tsym, limit, persist);
     }
 
@@ -45,7 +46,7 @@ public class CryptoController {
     public CryptoRoot searchHour (@RequestParam(value = "fsym", required = true, defaultValue = "BTC") String fsym,
                                   @RequestParam(value = "tsym", required = true, defaultValue = "USD") String tsym,
                                   @RequestParam(value = "limit", required = false, defaultValue = "500") int limit,
-                                  @RequestParam(value = "persist", defaultValue = "false") boolean persist){
+                                  @RequestParam(value = "persist", defaultValue = "false") boolean persist) throws DuplicateDataException {
         return cryptoService.search("histohour", fsym, tsym, limit, persist);
     }
 
@@ -62,7 +63,7 @@ public class CryptoController {
     public CryptoRoot searchDay (@RequestParam(value = "fsym", required = true, defaultValue = "BTC") String fsym,
                                  @RequestParam(value = "tsym", required = true, defaultValue = "USD") String tsym,
                                  @RequestParam(value = "limit", required = false, defaultValue = "100") int limit,
-                                 @RequestParam(value = "persist", defaultValue = "false") boolean persist){
+                                 @RequestParam(value = "persist", defaultValue = "false") boolean persist) throws DuplicateDataException {
         return cryptoService.search("histoday", fsym, tsym, limit, persist);
     }
 
