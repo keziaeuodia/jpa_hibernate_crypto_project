@@ -7,6 +7,11 @@ public class CryptoDataNotFoundException extends Exception {
     String message;
     HttpStatus status;
 
+    public CryptoDataNotFoundException(String message){
+        super(message);
+        this.message = message;
+    }
+
     @Override
     public String getMessage() {
         return message;

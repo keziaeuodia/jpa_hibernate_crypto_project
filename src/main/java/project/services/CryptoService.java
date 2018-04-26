@@ -3,6 +3,7 @@ package project.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import project.exceptions.CryptoDataNotFoundException;
 import project.exceptions.DuplicateDataException;
 import project.models.*;
 import project.repositories.HistoryInterface;
@@ -120,14 +121,18 @@ public class CryptoService {
         return "Data inserted";
     }
 
-    public String deleteDataById(int id) {
-        historyInterface.delete(id);
-        return "Data id: " + id + " deleted.";
+    public String deleteDataById(int id) throws CryptoDataNotFoundException{
+        if (historyInterface.findById(id) != null) {
+            historyInterface.delete(id);
+            return "Data id: " + id + " deleted.";
+        } else throw new CryptoDataNotFoundException("The data you are looking for does not exist");
     }
 
-    public History update(History data) {
-        historyInterface.save(data);
-        return historyInterface.findById(data.getId());
+    public History update(History data) throws CryptoDataNotFoundException{
+        if (historyInterface.findById(data.getId()) != null) {
+            historyInterface.save(data);
+            return historyInterface.findById(data.getId());
+        } else throw new CryptoDataNotFoundException("The data you are trying to update does not exist");
     }
 
     public History findByTime(long time, String timesignal){
