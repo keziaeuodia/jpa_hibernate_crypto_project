@@ -31,7 +31,7 @@ public class CryptoController {
     public CryptoRoot searchMinute (@RequestParam(value = "fsym", required = true, defaultValue = "BTC") String fsym,
                                     @RequestParam(value = "tsym", required = true, defaultValue = "USD") String tsym,
                                     @RequestParam(value = "limit", required = false, defaultValue = "1440") int limit,
-                                    @RequestParam(value = "persist", defaultValue = "false") boolean persist) throws DuplicateDataException {
+                                    @RequestParam(value = "persist", defaultValue = "false") boolean persist) {
         return cryptoService.search("histominute", fsym, tsym, limit, persist);
     }
 
@@ -43,11 +43,11 @@ public class CryptoController {
      * @param persist has the default value of false, if persist=true, data requested will be persisted to DB
      * @return CryptoRoot data
      */
-    @RequestMapping("/histohour")
+    @RequestMapping("data/histohour")
     public CryptoRoot searchHour (@RequestParam(value = "fsym", required = true, defaultValue = "BTC") String fsym,
                                   @RequestParam(value = "tsym", required = true, defaultValue = "USD") String tsym,
                                   @RequestParam(value = "limit", required = false, defaultValue = "500") int limit,
-                                  @RequestParam(value = "persist", defaultValue = "false") boolean persist) throws DuplicateDataException {
+                                  @RequestParam(value = "persist", defaultValue = "false") boolean persist){
         return cryptoService.search("histohour", fsym, tsym, limit, persist);
     }
 
@@ -60,11 +60,11 @@ public class CryptoController {
      * @param persist has the default value of false, if persist=true, data requested will be persisted to DB
      * @return CryptoRoot data
      */
-    @RequestMapping("/histoday")
+    @RequestMapping("data/histoday")
     public CryptoRoot searchDay (@RequestParam(value = "fsym", required = true, defaultValue = "BTC") String fsym,
                                  @RequestParam(value = "tsym", required = true, defaultValue = "USD") String tsym,
                                  @RequestParam(value = "limit", required = false, defaultValue = "100") int limit,
-                                 @RequestParam(value = "persist", defaultValue = "false") boolean persist) throws DuplicateDataException {
+                                 @RequestParam(value = "persist", defaultValue = "false") boolean persist){
         return cryptoService.search("histoday", fsym, tsym, limit, persist);
     }
 
@@ -109,7 +109,7 @@ public class CryptoController {
     @RequestMapping(method= RequestMethod.GET, value = "/currency")
     public ArrayList<History> findByFsymAndTsym(@RequestParam(value = "fsym", required = true) String fsym,
                                                 @RequestParam(value = "tsym", required = true) String tsym,
-                                                @RequestParam(value = "timesignal", required = false, defaultValue = "minute") String timesignal){
+                                                @RequestParam(value = "timesignal", required = false, defaultValue = "minute") String timesignal) {
         return cryptoService.getDataByFsymAndTsym(fsym, tsym, timesignal);
     }
 
@@ -120,7 +120,7 @@ public class CryptoController {
      * @return history data of that particular id
      */
     @GetMapping("/{id}")
-    public History getDataById(@PathVariable(value = "id") int id){
+    public History getDataById(@PathVariable(value = "id") int id) throws CryptoDataNotFoundException{
         return cryptoService.getDataById(id);
     }
 
@@ -141,7 +141,7 @@ public class CryptoController {
      * @return
      */
     @PostMapping("/")
-    public String add(@RequestBody History data){
+    public String add(@RequestBody History data) throws DuplicateDataException{
         return cryptoService.addData(data);
     }
 

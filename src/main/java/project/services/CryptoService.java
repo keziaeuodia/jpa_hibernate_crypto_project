@@ -28,7 +28,7 @@ public class CryptoService {
      * @param persist if persist is true, saveAllData method will be called to persist data to the database
      * @return
      */
-    public CryptoRoot search(String param, String fsym, String tsym, int limit, boolean persist) throws DuplicateDataException {
+    public CryptoRoot search(String param, String fsym, String tsym, int limit, boolean persist) {
         String fquery = "https://min-api.cryptocompare.com/data/" + param + "?fsym="+fsym+"&tsym="+tsym+"&limit="+limit;
 
         //mapping the data to the class
@@ -50,7 +50,7 @@ public class CryptoService {
      * @param tsym toCurrency
      * @param param histominute, histohour, or histoday
      */
-    private void saveAllData(CryptoRoot data, String fsym, String tsym, String param) throws DuplicateDataException{
+    private void saveAllData(CryptoRoot data, String fsym, String tsym, String param){
         for(int i = 0; i < data.getData().length; i++) {
 
             History obj = new History();
@@ -108,35 +108,36 @@ public class CryptoService {
         return historyInterface.findByToCurrencyAndTimesignal(tsym, timesignal);
     }
 
-    public History getDataById(int id) {
-        return historyInterface.findById(id);
+    public History getDataById(int id) throws CryptoDataNotFoundException{
+        if(historyInterface.findById(id) != null){
+            return historyInterface.findById(id);
+        }else throw new CryptoDataNotFoundException("The data id you're looking for is not found");
     }
 
     public ArrayList<History> getDataByFsymAndTsym(String fsym, String tsym, String timesignal){
         return historyInterface.findByFromCurrencyAndToCurrencyAndTimesignal(fsym, tsym, timesignal);
     }
 
-    public String addData(History data) {
-        historyInterface.save(data);
-        return "Data inserted";
+    public String addData(History data) throws DuplicateDataException{
+        if(historyInterface.findById(data.getId()) != null){
+            historyInterface.save(data);
+            return "Data inserted";
+        }else throw new DuplicateDataException("Duplicate id found");
+
     }
 
     public String deleteDataById(int id) throws CryptoDataNotFoundException{
         if (historyInterface.findById(id) != null) {
             historyInterface.delete(id);
             return "Data id: " + id + " deleted.";
-        } else throw new CryptoDataNotFoundException("The data you are looking for does not exist");
+        } else throw new CryptoDataNotFoundException("The data you're looking for does not exist");
     }
 
     public History update(History data) throws CryptoDataNotFoundException{
         if (historyInterface.findById(data.getId()) != null) {
             historyInterface.save(data);
             return historyInterface.findById(data.getId());
-        } else throw new CryptoDataNotFoundException("The data you are trying to update does not exist");
-    }
-
-    public History findByTime(long time, String timesignal){
-        return historyInterface.findByTimeAndTimesignal(time, timesignal);
+        } else throw new CryptoDataNotFoundException("The data you're trying to update does not exist");
     }
 
 }

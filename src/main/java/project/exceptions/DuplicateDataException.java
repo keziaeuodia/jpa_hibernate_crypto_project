@@ -7,13 +7,17 @@ public class DuplicateDataException extends Exception {
     String message;
     HttpStatus status;
 
+    public DuplicateDataException(String message){
+        super(message);
+        this.message = message;
+    }
+
     @Override
     public String getMessage() {
         return message;
     }
 
     public void setMessage(String message) {
-        message = "Duplicate Data Found";
         this.message = message;
     }
 
